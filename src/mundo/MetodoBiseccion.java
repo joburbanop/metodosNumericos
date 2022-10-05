@@ -130,10 +130,10 @@ public class MetodoBiseccion {
      */
     public double eval(double x)
     {
-        System.out.println("definicion en eval "+this.definicion);
+     
         try {
             expresion = new Expresion(this.definicion); 
-            System.out.println("entro a el manejo de ecepciones ");
+          
             expresion.setVariable("x", x);
             return Double.parseDouble(String.valueOf(expresion.evaluar()));
         } catch (ExpresionException ex) {
