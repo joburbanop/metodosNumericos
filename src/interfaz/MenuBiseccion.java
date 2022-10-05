@@ -17,7 +17,7 @@ public class MenuBiseccion extends JFrame {
     *----------------------*/
 
     // @TODO se utiliza para almaceenar el modelo de la tabla
-    DefaultTableModel modelo = new DefaultTableModel();
+    private static DefaultTableModel modelo = new DefaultTableModel();
 
     // @TODO controla lo que se ba observar en pantalla, es de tipo byte porque no
     // se almacenaran valores muy grandes
@@ -25,10 +25,12 @@ public class MenuBiseccion extends JFrame {
 
     private JPanel jPanel1, jPanel2, jPanel3, jPanel4, jPanel5, jPanel6, jPanel7, jPanel8;
 
-    private JTextField pantalla, rangoA, rangoB, error, pantallaFuncion, pantallRiaz, pantallaSalidaIntervalo;
+    private JTextField pantalla, rangoA, rangoB, error, pantallaFuncion, pantallaSalidaIntervalo;
 
-    private JLabel rangoALabel, rangoBLabel, erroJLabel, nombrePanelIngresoDatos, metodo, resultado, funcioningresada,
+    private JLabel rangoALabel, rangoBLabel, erroJLabel, nombrePanelIngresoDatos, metodo, funcioningresada,
             intevalo;
+
+    private static JLabel resultado;
 
     private JTextArea descripcion;
 
@@ -36,12 +38,12 @@ public class MenuBiseccion extends JFrame {
 
     private JScrollPane jScrollTabla;
 
-    private JTable tabaResultados;
+    private static JTable tabaResultados;
 
     private final static JButton matriez_BOTONES[][] = new JButton[7][7];
 
     private final static String NUMEROSOPERADORES[][] = {
-            { "1", "2", "3", "CE", ".", "sen", "⬇" },
+            { "1", "2", "3", "CE", ".", "sin", "⬇" },
             { "4", "5", "6", "+", "^", "*", "cos" },
             { "7", "8", "9", "-", "√", "log", "tan" },
             { "x", "0", "÷", "(", ")", "ln", "e" }
@@ -62,6 +64,8 @@ public class MenuBiseccion extends JFrame {
     /**
      * metodo contructor de la clase Menu Biseccion
      */
+
+   
     public MenuBiseccion() {
         /*---------
          *configuraciones basicas de el menu 
@@ -271,15 +275,16 @@ public class MenuBiseccion extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == evaluar) {
-
-                 
+                  
+                    limpiarTabla();
+                    ordenar();
                     
                  
                     funcionIngresada = new MetodoBiseccion();
-                    
+            
 
                     if (!pantalla.getText().equals("") && funcionIngresada.contieneX(pantalla.getText())) {
-
+                     
                         /*
                          * mostrar resultados
                          * se muestra la funcion por pantalla
@@ -294,12 +299,28 @@ public class MenuBiseccion extends JFrame {
                 
                             metodoBiseccion=new MetodoBiseccion(pantalla.getText(), rangoAPacerdado, rangoBParcedado, errorParceado);
                             
+                            pantallaFuncion=new JTextField(pantalla.getText());
+                            pantallaFuncion.setBackground(new ColorUIResource(238, 238, 238));
+                            pantallaFuncion.setBounds(35, 120, 400, 30);
+                            pantallaFuncion.setBorder(null);
+                            jPanel8.add(pantallaFuncion);
+
+                            pantallaSalidaIntervalo= new JTextField("["+rangoA.getText()+","+rangoB.getText()+"]");
+                            pantallaSalidaIntervalo.setBounds(110, 161, 338, 30);
+                            pantallaSalidaIntervalo.setBackground(new ColorUIResource(238, 238, 238));
+                            pantallaSalidaIntervalo.setBorder(null);
+                            jPanel8.add(pantallaSalidaIntervalo);
+        
+
+
+                            
                         } catch (NumberFormatException k) {
                             JOptionPane.showMessageDialog(null, "Verifique que el intervalo o tolerancia sea correcto.", "Error", JOptionPane.ERROR_MESSAGE);
                         }
-                        
-
-        
+                            
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Se requiere que ingrese una función con al menos una variable x.", "No ingreso función", JOptionPane.ERROR_MESSAGE);
                     }
 
                 }
@@ -432,9 +453,13 @@ public class MenuBiseccion extends JFrame {
      * o precionesmos el boton evaluar
      */
    
+    public void limpiarTabla() {
+        tabaResultados.setModel(new DefaultTableModel(new Object[][]{},
+                new String[]{"paso", "Xa", "f(Xa)", "Xb", "f(Xb)", "Xr (Raiz)", "f(Xr)"}) {
+                });
+    }
 
-
-    public void escribirResultados(double Xr) {
+    public static void escribirResultados(double Xr) {
         
 
         resultado.setText(resultado.getText()+Xr);
@@ -452,7 +477,7 @@ public class MenuBiseccion extends JFrame {
      */
 
 
-    public void setTabaResultados( Object[] datosFilas) {
+    public static void setTabaResultados( Object[] datosFilas) {
         modelo = (DefaultTableModel) tabaResultados.getModel();
         modelo.addRow(datosFilas);
   

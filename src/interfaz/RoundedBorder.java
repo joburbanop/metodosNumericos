@@ -3,7 +3,9 @@ package interfaz;
 import javax.swing.border.Border;
 
 import java.awt.*;
-
+/*
+ *clase creada para implementar  public abstract interface Border 
+ */
 public class RoundedBorder implements Border {
 
     private int radius;

@@ -34,7 +34,6 @@ public class MetodoBiseccion {
     /*--------------------------------------------------------
      * Relaciones 
      *--------------------------------------------------*/
-    private MenuBiseccion menu;
 
    
     private Expresion expresion;
@@ -62,7 +61,7 @@ public class MetodoBiseccion {
         this.rangoB=rangoB;
 
         this.eror=eror;
-        menu= new MenuBiseccion();
+     
   
         this.definicion=funcion;
         
@@ -85,7 +84,7 @@ public class MetodoBiseccion {
                     fb=eval(rangoB);
                     double fXr=eval(Xr);
                     
-                    menu.setTabaResultados(new Object[]{contador, rangoA, fa, rangoB, fb, Xr,fXr});
+                    MenuBiseccion.setTabaResultados(new Object[]{contador, rangoA, fa, rangoB, fb, Xr,fXr});
             
                     if (fa * eval(Xr) < 0) {
                         rangoB= Xr;
@@ -98,7 +97,7 @@ public class MetodoBiseccion {
             if (Double.isNaN(Xr)) {
                 JOptionPane.showMessageDialog(null, "Intervalos no factibles.", "Error de intervalos", JOptionPane.WARNING_MESSAGE);
             } else {
-                menu.escribirResultados(Xr);
+               MenuBiseccion.escribirResultados(Xr);
         
             }
         }
@@ -114,8 +113,11 @@ public class MetodoBiseccion {
      */
     public boolean contieneX(String cantidad) {
         for (int i = 0; i < cantidad.length(); i++) {
-            if (cantidad.substring(i, i + 1).equals("x")) 
-                return true;                
+            if (cantidad.substring(i, i + 1).equals("x"))
+            { 
+                return true;  
+            }
+                         
         }
         return false;
     }
@@ -128,10 +130,10 @@ public class MetodoBiseccion {
      */
     public double eval(double x)
     {
-        
+        System.out.println("definicion en eval "+this.definicion);
         try {
             expresion = new Expresion(this.definicion); 
-
+            System.out.println("entro a el manejo de ecepciones ");
             expresion.setVariable("x", x);
             return Double.parseDouble(String.valueOf(expresion.evaluar()));
         } catch (ExpresionException ex) {
