@@ -67,7 +67,7 @@ public class MetodoBiseccion {
         
         
         double Xr = Double.NaN;
-
+        double errorCalculado=100;
 
         double fa=eval(this.rangoA);
 
@@ -79,25 +79,50 @@ public class MetodoBiseccion {
             if ((fa * fb) < 0) {
                 do {
                     Xr = (rangoA + rangoB) / 2;   
-                    contador++;                                    
-                    fa=eval(rangoA);
+                    contador++;    
+                    //System.out.println(Xr);
+
+                    fa= eval(rangoA);
                     fb=eval(rangoB);
                     double fXr=eval(Xr);
                     
-                    MenuBiseccion.setTabaResultados(new Object[]{contador, rangoA, fa, rangoB, fb, Xr,fXr});
-            
+                    
+
                     if (fa * eval(Xr) < 0) {
-                        rangoB= Xr;
+                        /*
+                         * Xr= es el actual 
+                         * si se cumple esta condicion el rangoB es el pasado
+                         * esto para cuando se halla realizado mas de un paso 
+                         */
+                        if (contador>1) {
+                            errorCalculado=Math.abs((Xr-rangoB)/Xr)*100;
+                        }
+                        
+                        
+                        //System.out.println(errorCalculado);
+                        rangoB=Xr;
+                        
                     } else {
+                        if (contador>1) {
+                            errorCalculado=Math.abs((Xr-rangoA)/Xr)*100;
+                        }
+                       
+                        //System.out.println(errorCalculado);
                         rangoA = Xr;
+                        
                     }
-                } while (Math.abs(eval(Xr)) > eror);
+                    
+                    Menu.setTabaResultados(new Object[]{contador, redondearDecimales(rangoA, 6) , redondearDecimales(fa, 6), redondearDecimales(rangoB, 6),redondearDecimales(fb, 6),redondearDecimales(Xr, 6),redondearDecimales(fXr, 6),redondearDecimales(errorCalculado, 6)});
+                   
+            
+                    
+                } while (errorCalculado >=eror);
             }//termina if
 
             if (Double.isNaN(Xr)) {
                 JOptionPane.showMessageDialog(null, "Intervalos no factibles.", "Error de intervalos", JOptionPane.WARNING_MESSAGE);
             } else {
-               MenuBiseccion.escribirResultados(Xr);
+               //MenuBiseccion.escribirResultados(Xr);
         
             }
         }
@@ -143,6 +168,16 @@ public class MetodoBiseccion {
     }
 
     
+    public static double redondearDecimales(double valorInicial, int numeroDecimales) {
+
+        double parteEntera, resultado;
+        resultado = valorInicial;
+        parteEntera = Math.floor(resultado);
+        resultado=(resultado-parteEntera)*Math.pow(10, numeroDecimales);
+        resultado=Math.round(resultado);
+        resultado=(resultado/Math.pow(10, numeroDecimales))+parteEntera;
+        return resultado;
+    }
     
     public double getXr() {
         return Xr;

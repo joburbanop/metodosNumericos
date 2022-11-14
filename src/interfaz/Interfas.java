@@ -13,7 +13,7 @@ public class Interfas
     *---------------------------*/
     
     public static void main(String[] args) {
-        new MenuBiseccion();
+        new Menu();
 
         
     }

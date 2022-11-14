@@ -3,6 +3,7 @@
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
         "lib/jme_6_0.jar",
-        
+        "lib/djep-1.0.0.jar",
+        "lib/jep-2.3.1.jar"
     ]
 }
