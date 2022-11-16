@@ -1,7 +1,5 @@
 package mundo;
 
-import java.util.ArrayList;
-
 import javax.swing.JOptionPane;
 
 import interfaz.Menu;

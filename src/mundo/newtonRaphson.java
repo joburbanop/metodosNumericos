@@ -4,6 +4,7 @@ import javax.swing.JOptionPane;
 
 import org.lsmp.djep.djep.DJep;
 import org.nfunk.jep.Node;
+import org.nfunk.jep.ParseException;
 
 import jme.Expresion;
 import jme.excepciones.ExpresionException;
@@ -63,27 +64,49 @@ public class newtonRaphson {
 
         try {
 
-            DJep djepObject;
-            Node node_funcion;
-            Node diff_simplificada;
+            //Djep la clase encargada de la derivacion
+            DJep derivacionDJep;
 
-            djepObject = new DJep();
-            djepObject.addStandardFunctions();
-            djepObject.addStandardConstants();
-            djepObject.addComplex();
-            djepObject.setAllowUndeclared(true);
-            djepObject.setAllowAssignment(true);
-            djepObject.setImplicitMul(true);
-            djepObject.addStandardDiffRules();
+            //es el nodo de la funcion
+            Node nodeFuncion;
 
-            node_funcion = (Node) djepObject.parse(funcion);
+            //nodo de la derivada
+            Node nodeDerivada;
 
-            Node diff = djepObject.differentiate(node_funcion, "x");
-            diff_simplificada = djepObject.simplify(diff);
+            derivacionDJep = new DJep();           
+             
+            //se necesitan agregar las funciones estandares
+            derivacionDJep.addStandardFunctions();
+            
+            //se agregan las constantes estandares
+            derivacionDJep.addStandardConstants();
 
-            return djepObject.toString(diff_simplificada);
+            // se añaden los numeros complejos
+            derivacionDJep.addComplex();
 
-        } catch (org.nfunk.jep.ParseException e) {
+             //prtmitir variables que no se han declarado
+            derivacionDJep.setAllowUndeclared(true);
+            //permite diferenteas accionaciones
+            derivacionDJep.setAllowAssignment(true);
+            //activando las reglas de multiplicacion 
+            derivacionDJep.setImplicitMul(true);
+            //reglas estandares de diferenciaon
+            derivacionDJep.addStandardDiffRules();
+
+
+            nodeFuncion = (Node) derivacionDJep.parse(funcion);
+
+            //se deriva respecto a x 
+            Node diff = derivacionDJep.differentiate(nodeFuncion, "x");
+
+            //se simplifica 
+            nodeDerivada = derivacionDJep.simplify(diff);
+
+            //se envia 
+            return derivacionDJep.toString(nodeDerivada);
+
+        } catch (ParseException e) {
+
             System.out.println("No se puede derivar");
             return "";
         }
